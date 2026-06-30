@@ -21,6 +21,12 @@ It works like a lightweight status bridge: FlowTS runs a real embedded TeamSpeak
 - Fixed-size windows for stable layout.
 - Self-contained Windows x64 single-file release build.
 
+## Icon Wanted
+
+FlowTS is currently looking for a dedicated app icon. The icon bundled with early builds is temporary.
+
+If you are interested in contributing an icon, please open an issue or pull request with a proposed design. A good icon should be simple, recognizable at small sizes, and visually connected to FlowTS as a TeamSpeak status bridge.
+
 ## Download
 
 Download the latest release package from GitHub Releases:
