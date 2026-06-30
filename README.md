@@ -4,18 +4,14 @@ FlowTS 是一个 Windows 桌面工具，用来把你电脑当前正在使用的�
 
 它的定位是一个轻量级状态桥接工具：FlowTS 会在本机运行一个内置的真实 TeamSpeak 客户端 bot，连接到你的 TeamSpeak 服务器，检测当前前台窗口，并把检测到的软件名称更新到 bot 昵称中。
 
-> English summary: FlowTS is a native Windows desktop app that runs an embedded TeamSpeak client bot and updates the bot nickname based on your current foreground application.
 
 ## 功能特性
 
 - 原生 Windows GUI。
-- 使用来自 TS3AudioBot 的 `TSLib`，以真实 TeamSpeak 客户端 bot 模式运行。
-- 不使用 ServerQuery bot。
-- 不启动外部 `TS3AudioBot.exe` 进程。
+- 使用来自 TS3AudioBot 的 `TSLib`
 - 检测当前前台应用，并优先显示更友好的应用名称。
 - 支持自定义昵称模板。
 - 支持 TeamSpeak 地址、域名和端口。
-- 支持服务器密码、默认频道、频道密码。
 - 支持托盘后台运行。
 - 支持开机后台自启动。
 - 支持启动后自动连接。
@@ -169,27 +165,3 @@ flowts-client-config.json
 FlowTS 自身的项目许可证暂未最终确定。第三方组件的许可证文件已保留在 `vendor/` 目录，并在 `THIRD_PARTY_NOTICES.md` 中说明。
 
 ---
-
-# English
-
-FlowTS is a native Windows desktop app that shows your current foreground application in a TeamSpeak bot nickname.
-
-It runs an embedded TeamSpeak client bot through vendored `TSLib`, connects to your TeamSpeak server, watches the active window on your PC, and updates the bot nickname with the detected application name.
-
-## English Quick Start
-
-1. Download `FlowTS-v0.1.0-win-x64.zip` from GitHub Releases.
-2. Extract the zip.
-3. Run `FlowTS.exe`.
-4. Open `设置` to configure your TeamSpeak server, bot nickname, and nickname template.
-5. Click `启动` to connect the bot.
-
-Default template:
-
-```text
-{bot} | {app}
-```
-
-Available variables: `{bot}`, `{app}`, `{title}`, `{short_title}`, `{process}`.
-
-FlowTS does not use ServerQuery and does not launch an external `TS3AudioBot.exe` process.
