@@ -1,120 +1,157 @@
 ﻿# FlowTS
 
-FlowTS 是一个 Windows 桌面 GUI 工具，用来把电脑当前正在使用的软件显示到 TeamSpeak bot 昵称上。
+FlowTS is a small Windows desktop tool that shows your current foreground application in a TeamSpeak bot nickname.
 
-当前版本是内置真实 TeamSpeak 客户端模式：FlowTS 直接引用 TS3AudioBot 项目里的 `TSLib`，自己连接 TeamSpeak 服务器并修改自己的客户端昵称。它不使用 ServerQuery，也不启动独立的 `TS3AudioBot.exe` 子进程。
+It works like a lightweight status bridge: FlowTS runs a real embedded TeamSpeak client bot, connects to your TeamSpeak server, watches the active window on your PC, and updates the bot nickname with the detected application name.
 
-## 当前状态
+## Features
 
-- 新版程序：`dist\FlowTS\FlowTS.exe`。
-- 发布方式：win-x64 self-contained 压缩单文件。
-- 运行目录现在只保留一个 exe，项目总体积已从约 1GB 降到约 72MB。
-- 支持中文 GUI、托盘后台、开机后台启动、启动后自动连接、Dev Mode 调试信息。
+- Native Windows GUI.
+- Real TeamSpeak client bot mode through vendored `TSLib` from TS3AudioBot.
+- No ServerQuery bot.
+- No external `TS3AudioBot.exe` process.
+- Foreground application detection with friendly application names.
+- Custom nickname template.
+- TeamSpeak address/domain and port support.
+- Optional server password, default channel, and channel password.
+- Tray background mode.
+- Start with Windows in background mode.
+- Auto connect on launch.
+- Dev Mode debug log toggle.
+- Fixed-size windows for stable layout.
+- Self-contained Windows x64 single-file release build.
 
-## 启动
+## Download
 
-推荐直接双击：
-
-```text
-dist\FlowTS\FlowTS.exe
-```
-
-如果要从项目根目录启动且不出现命令框，双击：
-
-```text
-Start-FlowTS.vbs
-```
-
-后台启动参数：
+Download the latest release package from GitHub Releases:
 
 ```text
-dist\FlowTS\FlowTS.exe --background
+FlowTS-v0.1.0-win-x64.zip
 ```
 
-旧的 `FlowTS.cmd` / `Run-FlowTS-Native.cmd` 已移除，因为通过 cmd 启动会出现命令框闪烁。
+Extract the zip and run:
 
-## 主界面
+```text
+FlowTS.exe
+```
 
-- 顶部显示 `你好，当前计算机用户名`。
-- 主面板显示 TSBot 连接状态。
-- 当前窗口面板显示正在使用的应用和窗口标题。
-- `设置` 按钮打开独立设置窗口。
-- `后台` 按钮隐藏到系统托盘。
+You can also start it hidden in the background:
 
-## 设置菜单
+```text
+FlowTS.exe --background
+```
 
-设置窗口中填写：
+## Usage
 
-- 服务器地址，支持域名。
-- 端口，默认通常是 `9987`。
-- 服务器密码。
-- 默认频道。
-- 频道密码。
-- Bot 昵称。
-- 昵称模板。
-- 更新间隔。
+1. Open FlowTS.
+2. Click `设置`.
+3. Fill in your TeamSpeak server address and port.
+4. Fill in optional server/channel passwords if needed.
+5. Set the bot nickname and nickname template.
+6. Click `保存`.
+7. Click `启动` on the main window.
 
-运行选项：
+To fully exit FlowTS while tray mode is enabled, right-click the tray icon and choose `退出`.
 
-- `保存密码到本地`。
-- `关闭或最小化时进入后台`。
-- `开机后台自启动`。
-- `启动后自动连接 TSBot`。
-- `Dev Mode`：开启后主界面显示调试日志；关闭后隐藏调试信息。
+## Nickname Template
 
-## 模板变量
-
-- `{bot}`：设置里的 Bot 昵称。
-- `{app}`：当前前台程序名称，优先使用应用显示名，例如 TeamSpeak 3、Google Chrome。
-- `{title}`：当前窗口标题。
-- `{short_title}`：裁剪后的窗口标题。
-- `{process}`：进程名。
-
-默认模板：
+The default template is:
 
 ```text
 {bot} | {app}
 ```
 
-## 后台与自启动
+Available variables:
 
-- 关闭窗口或最小化时进入托盘，不退出程序。
-- 开机自启动写入当前用户注册表：
+- `{bot}`: bot nickname from settings.
+- `{app}`: friendly name of the current foreground application.
+- `{title}`: current foreground window title.
+- `{short_title}`: shortened window title.
+- `{process}`: process name.
+
+Examples:
+
+```text
+{bot} | {app}
+Now: {short_title}
+{app} - {process}
+```
+
+TeamSpeak nicknames are limited in length, so FlowTS trims the final nickname when needed.
+
+## Background and Startup
+
+FlowTS supports tray/background usage:
+
+- `关闭或最小化时进入后台`: hides the window to the system tray instead of exiting.
+- `开机后台自启动`: writes a current-user Windows startup entry.
+- `启动后自动连接 TSBot`: connects automatically after launch.
+
+The startup entry is stored under:
 
 ```text
 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
-- 自启动命令会带 `--background`，因此开机后不会弹出主窗口。
-- 真正退出程序：右键系统托盘里的 FlowTS 图标，选择 `退出`。
+No administrator permission is required.
 
-## 内存与体积
+## Dev Mode
 
-- FlowTS 不启动外部 `TS3AudioBot.exe`，没有 WebView。
-- 后台启动不会显示主窗口；设置窗口按需创建。
-- 隐藏到托盘或停止 bot 后会主动释放一轮工作集。
-- 当前后台空闲测试：工作集约 7.6MB，私有内存约 44.9MB。
-- 最终发布 exe 约 70.7MB。
+Enable `Dev Mode` in settings to show debug logs in the main window. Keep it disabled for normal usage.
 
-## 重新构建
+## Build from Source
 
-如果需要重新构建，先运行：
+Requirements:
+
+- Windows x64.
+- .NET SDK 8.0.
+
+If .NET SDK is not installed globally, run:
 
 ```text
 Install-DotNet-SDK.cmd
 ```
 
-然后运行：
+Then build the self-contained executable:
 
 ```text
 Build-FlowTS-Native-Exe.cmd
 ```
 
-构建完成后可以删除 `.dotnet`、`FlowTS.Native\bin`、`FlowTS.Native\obj` 来再次减小项目目录体积。
+Output:
 
-## 保留文件说明
+```text
+dist\FlowTS\FlowTS.exe
+```
 
-- `FlowTS.Native`：FlowTS GUI 和 bot 主程序源码。
-- `vendor/TS3AudioBot-source/TSLib`：真实 TeamSpeak 客户端库源码。
-- `vendor/libopus/libopus.dll`：TSLib 语音客户端所需原生库。
-- `dist/FlowTS/FlowTS.exe`：最终可运行程序。
+The build script publishes a compressed self-contained single-file executable for `win-x64`.
+
+## Repository Layout
+
+```text
+FlowTS.Native/                  FlowTS GUI and bot application source
+vendor/TS3AudioBot-source/TSLib Vendored TeamSpeak client library
+vendor/libopus/libopus.dll      Native Opus library required by TSLib
+dist/                           Local build output, ignored by git
+release/                        Local release zip output, ignored by git
+```
+
+## Third-party Components
+
+FlowTS vendors parts of TS3AudioBot's `TSLib` and includes `libopus.dll`.
+
+See:
+
+```text
+THIRD_PARTY_NOTICES.md
+```
+
+## Security Notes
+
+FlowTS stores configuration next to the executable in `flowts-client-config.json`.
+
+If `保存密码到本地` is disabled, server and channel passwords are not written to that config file.
+
+## License
+
+FlowTS project licensing has not been finalized yet. Third-party licenses are preserved under `vendor/` and documented in `THIRD_PARTY_NOTICES.md`.
