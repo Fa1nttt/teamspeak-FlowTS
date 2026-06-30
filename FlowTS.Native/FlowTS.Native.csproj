@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>FlowTS</AssemblyName>
+    <RootNamespace>FlowTS</RootNamespace>
+    <ApplicationIcon>flowts.ico</ApplicationIcon>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <PublishSingleFile>true</PublishSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <PublishReadyToRun>false</PublishReadyToRun>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\vendor\TS3AudioBot-source\TSLib\TSLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="flowts.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\vendor\libopus\libopus.dll" Link="libopus.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
