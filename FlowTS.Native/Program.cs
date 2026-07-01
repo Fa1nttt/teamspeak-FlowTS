@@ -33,6 +33,8 @@ internal static class Program
 
 internal sealed class MainForm : Form
 {
+    private const int MaxDebugLogLines = 500;
+
     private readonly PictureBox logoBox = new();
     private readonly Label helloLabel = new();
     private readonly Label statusText = new();
@@ -273,8 +275,18 @@ internal sealed class MainForm : Form
             var activity = ActivityReader.GetCurrentActivity();
             var nickname = NicknameFormatter.Format(NicknameFormatter.Render(config.Template, activity, config.BotNickname), config.BotNickname);
             AddLog($"连接到 {config.BuildAddress()} ...");
+            var requestedChannel = config.Channel.Trim();
+            var defaultChannel = config.BuildDefaultChannel();
+            if (!string.IsNullOrWhiteSpace(defaultChannel))
+            {
+                AddLog(string.Equals(requestedChannel, defaultChannel, StringComparison.Ordinal)
+                    ? $"默认频道请求：{defaultChannel}"
+                    : $"默认频道请求：{requestedChannel} -> {defaultChannel}");
+            }
             await botClient.ConnectAsync(config);
             lastNickname = await botClient.SetNicknameAsync(nickname);
+            var channelDiagnostic = await botClient.GetDefaultChannelDiagnosticAsync(config);
+            if (!string.IsNullOrWhiteSpace(channelDiagnostic)) AddLog(channelDiagnostic);
             timer.Interval = Math.Max(3, config.IntervalSeconds) * 1000;
             timer.Start();
             UpdateActivityLabels(activity);
@@ -372,14 +384,23 @@ internal sealed class MainForm : Form
     {
         if (!config.DevMode && !debugBox.Visible) return;
         debugBox.AppendText($"[{DateTime.Now:HH:mm:ss}] {text}{Environment.NewLine}");
+        TrimDebugLogIfNeeded();
         debugBox.SelectionStart = debugBox.Text.Length;
         debugBox.ScrollToCaret();
+    }
+
+    private void TrimDebugLogIfNeeded()
+    {
+        var lines = debugBox.Lines;
+        if (lines.Length <= MaxDebugLogLines) return;
+        debugBox.Lines = lines[^MaxDebugLogLines..];
     }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
+            debugBox.Clear();
             trayIcon.Dispose();
             trayMenu.Dispose();
             botClient.Dispose();
@@ -632,6 +653,41 @@ internal sealed class FlowTsBotClient : IDisposable
         return clean;
     }
 
+    public async Task<string?> GetDefaultChannelDiagnosticAsync(FlowTsConfig config)
+    {
+        if (scheduler is null || client is null) return null;
+        var requestedChannel = config.Channel.Trim();
+        var defaultChannel = config.BuildDefaultChannel();
+        if (string.IsNullOrWhiteSpace(defaultChannel)) return null;
+
+        await Task.Delay(500);
+        return await scheduler.Invoke(() =>
+        {
+            if (client is null) return null;
+            var self = client.Book.Self();
+            if (self is null)
+            {
+                return "默认频道检查：已连接，但暂时无法读取 bot 当前频道。";
+            }
+
+            var currentId = self.Channel.Value;
+            var currentChannel = client.Book.CurrentChannel();
+            var currentName = currentChannel?.Name.ToString();
+            var currentLabel = string.IsNullOrWhiteSpace(currentName) ? $"cid {currentId}" : $"cid {currentId}（{currentName}）";
+            var expectedId = FlowTsConfig.TryGetDefaultChannelId(defaultChannel);
+            if (expectedId is not null)
+            {
+                if (currentId == expectedId.Value)
+                {
+                    return $"默认频道检查：已进入 {currentLabel}。";
+                }
+                return $"默认频道检查：期望 cid {expectedId.Value}，实际 {currentLabel}。可能原因：cid 不存在、无权限进入、频道密码错误，或服务器将 bot 放回默认频道。";
+            }
+
+            return $"默认频道检查：请求频道路径 \"{requestedChannel}\"，当前位于 {currentLabel}。如果没有进入目标频道，请检查频道路径是否与服务器频道树一致。";
+        });
+    }
+
     public async Task DisconnectAsync()
     {
         var currentScheduler = scheduler;
@@ -717,6 +773,12 @@ internal sealed record FlowTsConfig
         if (string.IsNullOrWhiteSpace(channel)) return string.Empty;
         if (channel.StartsWith("/", StringComparison.Ordinal)) return channel;
         return channel.All(static c => c >= '0' && c <= '9') ? "/" + channel : channel;
+    }
+
+    public static ulong? TryGetDefaultChannelId(string channel)
+    {
+        if (!channel.StartsWith("/", StringComparison.Ordinal)) return null;
+        return ulong.TryParse(channel[1..], out var channelId) ? channelId : null;
     }
 }
 
