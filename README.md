@@ -82,6 +82,36 @@ FlowTS 支持以下后台相关选项：
 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
+## 参与贡献
+
+FlowTS 仍处于早期版本，欢迎通过 Issue 或 Pull Request 参与改进。当前尤其欢迎以下方向的贡献：
+
+- 更适合 FlowTS 的专属 App 图标。
+- 更多应用名称识别规则，让昵称显示更接近平时看到的软件名称。
+- TeamSpeak 连接兼容性测试与问题反馈。
+- UI 细节、交互体验和后台运行体验优化。
+- 使用教程、截图和文档改进。
+
+提交 Pull Request 前，建议先通过 Issue 简要说明想修改的内容，方便确认方向。
+
+## 贡献者
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Fa1nttt">
+        <img src="https://github.com/Fa1nttt.png?size=96" width="72" alt="Fa1nttt" />
+        <br />
+        <sub><b>Fa1nttt</b></sub>
+      </a>
+      <br />
+      项目发起、功能设计、开发与发布
+    </td>
+  </tr>
+</table>
+
+感谢 TS3AudioBot 项目提供的 `TSLib`，FlowTS 的 TeamSpeak 客户端连接能力基于该组件实现。
+
 ## 从源码构建
 
 构建要求：
