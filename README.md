@@ -1,6 +1,8 @@
-# FlowTS
+<h1 align="center">FlowTS</h1>
 
-FlowTS 是一个 Windows 桌面工具，可以把电脑当前正在使用的软件同步到 TeamSpeak bot 昵称中。
+<p align="center">
+  将电脑当前正在使用的软件同步到 TeamSpeak bot 昵称中。
+</p>
 
 它不是 ServerQuery bot，也不需要额外运行 TS3AudioBot 程序。FlowTS 内置基于 TS3AudioBot `TSLib` 的 TeamSpeak 客户端 bot，连接服务器后会检测当前前台窗口，并自动更新 bot 昵称。
 
@@ -23,7 +25,7 @@ FlowTS 是一个 Windows 桌面工具，可以把电脑当前正在使用的软�
 前往 GitHub Releases 下载最新版本：
 
 ```text
-FlowTS-v0.2.0-win-x64.zip
+FlowTS-v0.2.1-win-x64.zip
 ```
 
 解压后运行：
