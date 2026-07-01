@@ -616,7 +616,7 @@ internal sealed class FlowTsBotClient : IDisposable
             identity,
             username: NicknameFormatter.Format(config.BotNickname, "FlowTS"),
             serverPassword: string.IsNullOrEmpty(config.ServerPassword) ? Password.Empty : Password.FromPlain(config.ServerPassword),
-            defaultChannel: config.Channel,
+            defaultChannel: config.BuildDefaultChannel(),
             defaultChannelPassword: string.IsNullOrEmpty(config.ChannelPassword) ? Password.Empty : Password.FromPlain(config.ChannelPassword),
             logId: new Id(1));
         var result = await scheduler.InvokeAsync(() => client.Connect(connection));
@@ -709,6 +709,14 @@ internal sealed record FlowTsConfig
         if (address.StartsWith("[", StringComparison.Ordinal)) return address.Contains("]:", StringComparison.Ordinal) ? address : address + ":" + ServerPort;
         if (IPAddress.TryParse(address, out var ip) && ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6) return "[" + address + "]:" + ServerPort;
         return address.Contains(':') ? address : address + ":" + ServerPort;
+    }
+
+    public string BuildDefaultChannel()
+    {
+        var channel = Channel.Trim();
+        if (string.IsNullOrWhiteSpace(channel)) return string.Empty;
+        if (channel.StartsWith("/", StringComparison.Ordinal)) return channel;
+        return channel.All(static c => c >= '0' && c <= '9') ? "/" + channel : channel;
     }
 }
 
