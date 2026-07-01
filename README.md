@@ -4,7 +4,9 @@
   将电脑当前正在使用的软件同步到 TeamSpeak bot 昵称中。
 </p>
 
-它不是 ServerQuery bot，也不需要额外运行 TS3AudioBot 程序。FlowTS 内置基于 TS3AudioBot `TSLib` 的 TeamSpeak 客户端 bot，连接服务器后会检测当前前台窗口，并自动更新 bot 昵称。
+FlowTS 内置基于 TS3AudioBot `TSLib` 的 TeamSpeak 客户端 bot，可以直接连接到你的 TeamSpeak 服务器。
+
+连接成功后，FlowTS 会持续检测当前前台窗口，并将识别到的软件名称同步到 bot 昵称中。
 
 ## 程序截图
 
