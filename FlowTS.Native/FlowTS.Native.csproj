@@ -7,6 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>FlowTS</AssemblyName>
     <RootNamespace>FlowTS</RootNamespace>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
     <ApplicationIcon>flowts.ico</ApplicationIcon>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <DebugType>none</DebugType>

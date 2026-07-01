@@ -17,15 +17,13 @@ FlowTS 是一个 Windows 桌面工具，可以把电脑当前正在使用的软�
 - 支持自定义 bot 昵称与昵称模板。
 - 支持开机后台自启动和启动后自动连接。
 - 支持 Dev Mode 调试日志开关。
-- 固定窗口尺寸，避免缩放导致界面错位。
-- 提供 Windows x64 自包含单文件版本。
 
 ## 下载与运行
 
 前往 GitHub Releases 下载最新版本：
 
 ```text
-FlowTS-v0.1.0-win-x64.zip
+FlowTS-v0.2.0-win-x64.zip
 ```
 
 解压后运行：
@@ -49,6 +47,15 @@ FlowTS.exe --background
 5. 保存设置后回到主界面，点击 `启动`。
 
 启用后台模式后，关闭窗口会将程序隐藏到系统托盘。需要完全退出时，请右键托盘中的 FlowTS 图标并选择 `退出`。
+
+## 默认频道
+
+默认频道支持两种写法：
+
+- 频道路径，例如 `Lobby/Music`。
+- 频道 ID，例如 `5` 或 `/5`。
+
+如果填写纯数字频道 ID，FlowTS 会在连接时自动转换为 TeamSpeak 客户端库需要的 `/<cid>` 格式。
 
 ## 昵称模板
 
@@ -87,30 +94,9 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
 FlowTS 仍处于早期版本，欢迎通过 Issue 或 Pull Request 参与改进。当前尤其欢迎以下方向的贡献：
 
 - 更适合 FlowTS 的专属 App 图标。
-- 更多应用名称识别规则，让昵称显示更接近平时看到的软件名称。
 - TeamSpeak 连接兼容性测试与问题反馈。
 - UI 细节、交互体验和后台运行体验优化。
 - 使用教程、截图和文档改进。
-
-提交 Pull Request 前，建议先通过 Issue 简要说明想修改的内容，方便确认方向。
-
-## 贡献者
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Fa1nttt">
-        <img src="https://github.com/Fa1nttt.png?size=96" width="72" alt="Fa1nttt" />
-        <br />
-        <sub><b>Fa1nttt</b></sub>
-      </a>
-      <br />
-      项目发起、功能设计、开发与发布
-    </td>
-  </tr>
-</table>
-
-感谢 TS3AudioBot 项目提供的 `TSLib`，FlowTS 的 TeamSpeak 客户端连接能力基于该组件实现。
 
 ## 从源码构建
 
@@ -163,4 +149,4 @@ flowts-client-config.json
 
 ## 许可证
 
-FlowTS 自身的项目许可证暂未最终确定。第三方组件的许可证文件已保留在 `vendor/` 目录，并在 `THIRD_PARTY_NOTICES.md` 中说明。
+FlowTS 使用 MIT License 开源。第三方组件的许可证文件已保留在 `vendor/` 目录，并在 `THIRD_PARTY_NOTICES.md` 中说明。
